@@ -1,4 +1,5 @@
 ﻿using AnonTesting.DAL.Interfaces;
+using AnonTesting.DAL.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -9,7 +10,7 @@ namespace AnonTesting.DAL.Repositories.Abstract
         protected readonly DbSet<TEntity> _set;
         protected readonly DbContext _context;
 
-        public IEntityRepository(DbContext context)
+        public IEntityRepository(ApplicationContext context)
         {
             _set = context.Set<TEntity>();
             _context = context;

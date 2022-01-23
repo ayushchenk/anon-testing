@@ -6,7 +6,7 @@ namespace AnonTesting.DAL.Repositories
 {
     public class AnswerRepository : IEntityRepository<Answer>
     {
-        public AnswerRepository(DbContext context) : base(context) 
+        public AnswerRepository(ApplicationContext context) : base(context) 
         {
         }
     }
