@@ -1,6 +1,5 @@
 ﻿using AnonTesting.BLL.Interfaces;
 using AnonTesting.DAL.Interfaces;
-using AnonTesting.DAL.Repositories.Abstract;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using System.Linq.Expressions;
@@ -11,10 +10,10 @@ namespace AnonTesting.BLL.Services.Abstract
         where TEntity : class, IEntity
         where TDto : class, IDto
     {
-        protected readonly GenericRepository<TEntity> _repository;
+        protected readonly IEntityRepository<TEntity> _repository;
         protected readonly IMapper _mapper;
 
-        public GenericService(GenericRepository<TEntity> repository, IMapper mapper)
+        public GenericService(IEntityRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
