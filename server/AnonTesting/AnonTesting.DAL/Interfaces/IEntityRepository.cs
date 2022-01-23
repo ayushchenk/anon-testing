@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace AnonTesting.DAL.Interfaces
 {
-    public interface IEntityRepository<TEntity> where TEntity : class, IEntity
+    public interface IEntityRepository<TEntity> : IDisposable where TEntity : class, IEntity
     {
         ValueTask<TEntity?> GetAsync(Guid id);
         ValueTask<IEnumerable<TEntity>> GetAllAsync();

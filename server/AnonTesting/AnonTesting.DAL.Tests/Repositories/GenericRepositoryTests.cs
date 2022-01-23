@@ -13,7 +13,7 @@ namespace AnonTesting.DAL.Tests.Repositories
     public class GenericRepositoryTests
     {
         private ApplicationContext _context = null!;
-        private GenericRepository<Test> _repository = null!;
+        private IEntityRepository<Test> _sut = null!;
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,7 +23,7 @@ namespace AnonTesting.DAL.Tests.Repositories
                 .Options;
 
             _context = new ApplicationContext(contextOptions);
-            _repository = new TestRepository(_context);
+            _sut = new TestRepository(_context);
         }
 
         [TestCleanup]
@@ -42,7 +42,7 @@ namespace AnonTesting.DAL.Tests.Repositories
             };
 
             //act
-            await _repository.CreateAsync(test);
+            await _sut.CreateAsync(test);
 
             //
             Assert.AreNotEqual(Guid.Empty, test.Id);
@@ -57,10 +57,10 @@ namespace AnonTesting.DAL.Tests.Repositories
                 Title = "test"
             };
 
-            await _repository.CreateAsync(sourceEntity);
+            await _sut.CreateAsync(sourceEntity);
 
             //act
-            var queriedEntity = await _repository.GetAsync(sourceEntity.Id);
+            var queriedEntity = await _sut.GetAsync(sourceEntity.Id);
 
             //assert
             Assert.AreEqual(sourceEntity.Title, queriedEntity?.Title);
@@ -73,7 +73,7 @@ namespace AnonTesting.DAL.Tests.Repositories
             var randomGuid = Guid.NewGuid();
 
             //act
-            var queriedEntity = await _repository.GetAsync(randomGuid);
+            var queriedEntity = await _sut.GetAsync(randomGuid);
 
             //assert
             Assert.IsNull(queriedEntity);
@@ -90,10 +90,10 @@ namespace AnonTesting.DAL.Tests.Repositories
                 new Test(){ Title = "test3"},
             };
 
-            await _repository.BulkCreateAsync(sourceEntities);
+            await _sut.BulkCreateAsync(sourceEntities);
 
             //act
-            var queriedEntities = await _repository.GetAllAsync();
+            var queriedEntities = await _sut.GetAllAsync();
 
             //assert
             foreach(var sourceEntity in sourceEntities)
@@ -113,10 +113,10 @@ namespace AnonTesting.DAL.Tests.Repositories
                 new Test(){ Title = "test2"},
             };
 
-            await _repository.BulkCreateAsync(sourceEntities);
+            await _sut.BulkCreateAsync(sourceEntities);
 
             //act
-            var queriedEntities = await _repository.FindByAsync(e => e.Title.EndsWith("0"));
+            var queriedEntities = await _sut.FindByAsync(e => e.Title.EndsWith("0"));
 
             //assert
             Assert.AreEqual(1, queriedEntities.Count());
@@ -132,7 +132,7 @@ namespace AnonTesting.DAL.Tests.Repositories
                 Title = "initial"
             };
 
-            await _repository.CreateAsync(sourceEntity);
+            await _sut.CreateAsync(sourceEntity);
 
             //act
             var updateEntity = new Test()
@@ -141,9 +141,9 @@ namespace AnonTesting.DAL.Tests.Repositories
                 Title = "updated"
             };
 
-            await _repository.UpdateAsync(updateEntity);
+            await _sut.UpdateAsync(updateEntity);
 
-            var queriedEntity = await _repository.GetAsync(sourceEntity.Id);
+            var queriedEntity = await _sut.GetAsync(sourceEntity.Id);
 
             //assert
             Assert.AreEqual(updateEntity.Title, queriedEntity?.Title);
@@ -158,12 +158,12 @@ namespace AnonTesting.DAL.Tests.Repositories
                 Title = "test"
             };
 
-            await _repository.CreateAsync(sourceEntity);
+            await _sut.CreateAsync(sourceEntity);
 
             //act
-            var isDeleted = await _repository.DeleteAsync(sourceEntity.Id);
+            var isDeleted = await _sut.DeleteAsync(sourceEntity.Id);
 
-            var queriedEntity = await _repository.GetAsync(sourceEntity.Id);
+            var queriedEntity = await _sut.GetAsync(sourceEntity.Id);
 
             //assert
             Assert.IsTrue(isDeleted);
@@ -177,7 +177,7 @@ namespace AnonTesting.DAL.Tests.Repositories
             var randomGuid = Guid.NewGuid();
 
             //act
-            var isDeleted = await _repository.DeleteAsync(randomGuid);
+            var isDeleted = await _sut.DeleteAsync(randomGuid);
 
             //assert
             Assert.IsFalse(isDeleted);
