@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnonTesting.DAL.Repositories
 {
-    public class QuestionRepository : IEntityRepository<Question>
+    public class QuestionRepository : EntityRepository<Question>
     {
         public QuestionRepository(ApplicationContext context) : base(context) 
         { 

@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 
 namespace AnonTesting.DAL.Repositories.Abstract
 {
-    public abstract class IEntityRepository<TEntity> : Interfaces.IEntityRepository<TEntity> where TEntity : class, IEntity
+    public abstract class EntityRepository<TEntity> : IEntityRepository<TEntity> where TEntity : class, IEntity
     {
         protected readonly DbSet<TEntity> _set;
         protected readonly DbContext _context;
 
-        public IEntityRepository(ApplicationContext context)
+        public EntityRepository(ApplicationContext context)
         {
             _set = context.Set<TEntity>();
             _context = context;

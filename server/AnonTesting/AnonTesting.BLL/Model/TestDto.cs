@@ -6,6 +6,6 @@ namespace AnonTesting.BLL.Model
     {
         public Guid Id { set; get; }
         public string Title { set; get; } = null!;
-        public string UserId { set; get; } = null!;
+        public Guid UserId { set; get; }
     }
 }

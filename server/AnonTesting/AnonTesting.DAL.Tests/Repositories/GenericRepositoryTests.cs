@@ -13,7 +13,7 @@ namespace AnonTesting.DAL.Tests.Repositories
     public class GenericRepositoryTests
     {
         private ApplicationContext _context = null!;
-        private IEntityRepository<Test> _sut = null!;
+        private EntityRepository<Test> _sut = null!;
 
         [TestInitialize]
         public void TestInitialize()

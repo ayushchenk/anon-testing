@@ -1,15 +1,23 @@
 using AnonTesting.BLL.AutoMapperProfiles;
 using AnonTesting.BLL.Interfaces;
 using AnonTesting.BLL.Services;
+using AnonTesting.BLL.Validators;
 using AnonTesting.DAL.Interfaces;
 using AnonTesting.DAL.Model;
 using AnonTesting.DAL.Repositories;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(options =>
+{
+    options.RegisterValidatorsFromAssemblyContaining<TestValidator>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -20,7 +28,7 @@ string connectionString = appSettings.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(ApplicationProfile));
 builder.Services.AddScoped<IEntityRepository<Test>, TestRepository>();
-builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddMediatR(typeof(IDto).GetTypeInfo().Assembly);
 
 var app = builder.Build();
 

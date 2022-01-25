@@ -1,34 +1,37 @@
-﻿using AnonTesting.BLL.Interfaces;
+﻿using AnonTesting.BLL.Commands.Test;
 using AnonTesting.BLL.Model;
+using AnonTesting.BLL.Queries.Test;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnonTesting.API.Controllers
 {
-    [Route("api/tests")]
+    [Route("api/tests/")]
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly ITestService _service;
+        private readonly IMediator _mediator;
 
-        public TestController(ITestService service)
+        public TestController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [Route("user/{id}")]
+        public async Task<IActionResult> GetForUser(Guid id)
         {
-            var records = await _service.GetAllAsync();
+            var userTests = await _mediator.Send(new GetUserTestsQuery(id));
 
-            return Ok(records);
+            return Ok(userTests);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TestDto testDto)
+        public async Task<IActionResult> Post([FromBody] TestDto body)
         {
-            var id = await _service.CreateAsync(testDto);
+            Guid createdId = await _mediator.Send(new CreateTestCommand(body));
 
-            return Ok(id);
+            return CreatedAtAction(nameof(Post), createdId);
         }
     }
 }
