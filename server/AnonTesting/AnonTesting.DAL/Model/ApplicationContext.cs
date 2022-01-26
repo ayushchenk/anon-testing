@@ -20,7 +20,7 @@ namespace AnonTesting.DAL.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
 
                 string connectionString = appSettings.GetConnectionString("DefaultConnection");
 

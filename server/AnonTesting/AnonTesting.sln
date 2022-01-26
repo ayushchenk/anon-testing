@@ -5,13 +5,11 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonTesting.DAL", "AnonTesting.DAL\AnonTesting.DAL.csproj", "{A57C0BC0-C59F-4C2B-AB8D-C0B73934C9AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonTesting.DAL.Tests", "AnonTesting.DAL.Tests\AnonTesting.DAL.Tests.csproj", "{61BD34E5-411B-47D2-BA6A-FAB34D58B3CB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonTesting.BLL", "AnonTesting.BLL\AnonTesting.BLL.csproj", "{D29B88C0-079E-4A77-8E04-3428C7D6A370}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonTesting.BLL.Tests", "AnonTesting.BLL.Tests\AnonTesting.BLL.Tests.csproj", "{C4D3BACB-ABD3-445F-98B6-A46D48D8C2A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonTesting.API", "AnonTesting.API\AnonTesting.API.csproj", "{34AA9B2F-DE88-4651-81C6-C355407905CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonTesting.API", "AnonTesting.API\AnonTesting.API.csproj", "{34AA9B2F-DE88-4651-81C6-C355407905CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{A57C0BC0-C59F-4C2B-AB8D-C0B73934C9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A57C0BC0-C59F-4C2B-AB8D-C0B73934C9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A57C0BC0-C59F-4C2B-AB8D-C0B73934C9AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61BD34E5-411B-47D2-BA6A-FAB34D58B3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61BD34E5-411B-47D2-BA6A-FAB34D58B3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61BD34E5-411B-47D2-BA6A-FAB34D58B3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61BD34E5-411B-47D2-BA6A-FAB34D58B3CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D29B88C0-079E-4A77-8E04-3428C7D6A370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D29B88C0-079E-4A77-8E04-3428C7D6A370}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D29B88C0-079E-4A77-8E04-3428C7D6A370}.Release|Any CPU.ActiveCfg = Release|Any CPU
