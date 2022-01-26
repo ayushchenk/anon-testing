@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AnonTesting.API.Controllers
 {
-    [Route("api/tests/")]
     [ApiController]
+    [Route("api/tests/")]
     public class TestController : ControllerBase
     {
         private readonly IMediator _mediator;

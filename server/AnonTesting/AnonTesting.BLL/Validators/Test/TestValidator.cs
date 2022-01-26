@@ -1,7 +1,7 @@
 ﻿using AnonTesting.BLL.Model;
 using FluentValidation;
 
-namespace AnonTesting.BLL.Validators
+namespace AnonTesting.BLL.Validators.Test
 {
     public class TestValidator : AbstractValidator<TestDto>
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace AnonTesting.DAL.Model
 {
-    public class ApplicationContext: IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class ApplicationContext: IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<Test> Tests { set; get; } = null!;
         public DbSet<Question> Questions { set; get; } = null!;

@@ -1,4 +1,5 @@
-﻿using AnonTesting.BLL.Model;
+﻿using AnonTesting.BLL.Commands.User;
+using AnonTesting.BLL.Model;
 using AnonTesting.DAL.Model;
 using AutoMapper;
 
@@ -17,6 +18,9 @@ namespace AnonTesting.BLL.AutoMapperProfiles
                 .ReverseMap();
 
             CreateMap<TestResult, TestResultDto>().ReverseMap();
+
+            CreateMap<CreateUserCommand, User>()
+                .ForMember(dest => dest.UserName, options => options.MapFrom(source => source.Email));
         }
     }
 }
