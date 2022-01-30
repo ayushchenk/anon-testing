@@ -10,10 +10,12 @@ namespace AnonTesting.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly JwtSecurityTokenHandler _tokenHandler;
 
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
+            _tokenHandler = new JwtSecurityTokenHandler();
         }
 
         [HttpPost]
@@ -24,9 +26,7 @@ namespace AnonTesting.API.Controllers
             {
                 var token = await _mediator.Send(command);
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                return Ok(tokenHandler.WriteToken(token));
+                return Ok(_tokenHandler.WriteToken(token));
             }
             catch(Exception ex)
             {
@@ -42,9 +42,7 @@ namespace AnonTesting.API.Controllers
             {
                 var token = await _mediator.Send(command);
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                return Ok(tokenHandler.WriteToken(token));
+                return Ok(_tokenHandler.WriteToken(token));
             }
             catch (Exception ex)
             {

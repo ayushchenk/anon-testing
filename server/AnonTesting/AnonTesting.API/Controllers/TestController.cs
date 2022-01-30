@@ -1,8 +1,8 @@
 ﻿using AnonTesting.BLL.Commands.Test;
 using AnonTesting.BLL.Model;
 using AnonTesting.BLL.Queries.Test;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace AnonTesting.API.Controllers
 {
@@ -21,17 +21,31 @@ namespace AnonTesting.API.Controllers
         [Route("user/{id}")]
         public async Task<IActionResult> GetForUser(Guid id)
         {
-            var userTests = await _mediator.Send(new GetUserTestsQuery(id));
+            try
+            {
+                var userTests = await _mediator.Send(new GetUserTestsQuery(id));
 
-            return Ok(userTests);
+                return Ok(userTests);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TestDto body)
         {
-            Guid createdId = await _mediator.Send(new CreateTestCommand(body));
+            try
+            {
+                Guid createdId = await _mediator.Send(new CreateTestCommand(body));
 
-            return CreatedAtAction(nameof(Post), createdId);
+                return CreatedAtAction(nameof(Post), createdId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

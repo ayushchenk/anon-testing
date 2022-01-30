@@ -3,6 +3,7 @@ using AnonTesting.BLL.Model;
 using AnonTesting.BLL.Queries.Test;
 using AnonTesting.DAL.Model;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnonTesting.BLL.QueryHandlers.Test
 {
@@ -19,7 +20,7 @@ namespace AnonTesting.BLL.QueryHandlers.Test
 
         public Task<IEnumerable<TestDto>> Handle(GetUserTestsQuery query, CancellationToken cancellationToken)
         {
-            var userTestsEntities = _context.Tests.Where(test => test.UserId == query.UserId);
+            var userTestsEntities = _context.Tests.AsNoTracking().Where(test => test.UserId == query.UserId);
 
             var userTestsDtos = userTestsEntities.Select(test => _mapper.Map<DAL.Model.Test, TestDto>(test)).AsEnumerable();
 

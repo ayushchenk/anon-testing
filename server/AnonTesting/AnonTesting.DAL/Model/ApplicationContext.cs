@@ -7,10 +7,10 @@ namespace AnonTesting.DAL.Model
 {
     public class ApplicationContext: IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public DbSet<Test> Tests { set; get; } = null!;
-        public DbSet<Question> Questions { set; get; } = null!;
-        public DbSet<Answer> Answers { set; get; } = null!;
-        public DbSet<TestResult> TestResults { set; get; } = null!;
+        public virtual DbSet<Test> Tests { set; get; } = null!;
+        public virtual DbSet<Question> Questions { set; get; } = null!;
+        public virtual DbSet<Answer> Answers { set; get; } = null!;
+        public virtual DbSet<TestResult> TestResults { set; get; } = null!;
 
         public ApplicationContext() { }
 
