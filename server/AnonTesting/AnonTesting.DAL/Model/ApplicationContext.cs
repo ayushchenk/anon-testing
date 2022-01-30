@@ -5,12 +5,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace AnonTesting.DAL.Model
 {
-    public class ApplicationContext: IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class ApplicationContext: IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public DbSet<Test> Tests { set; get; } = null!;
-        public DbSet<Question> Questions { set; get; } = null!;
-        public DbSet<Answer> Answers { set; get; } = null!;
-        public DbSet<TestResult> TestResults { set; get; } = null!;
+        public virtual DbSet<Test> Tests { set; get; } = null!;
+        public virtual DbSet<Question> Questions { set; get; } = null!;
+        public virtual DbSet<Answer> Answers { set; get; } = null!;
+        public virtual DbSet<TestResult> TestResults { set; get; } = null!;
 
         public ApplicationContext() { }
 
@@ -20,7 +20,7 @@ namespace AnonTesting.DAL.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
 
                 string connectionString = appSettings.GetConnectionString("DefaultConnection");
 
