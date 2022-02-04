@@ -7,7 +7,7 @@ namespace AnonTesting.BLL.Model
         public Guid Id { set; get; }
         public int CorrectQuestions { set; get; }
         public string ContestantName { set; get; } = null!;
-        public DateTime CompletedOn { set; get; }
+        public DateTime CompletedOn { set; get; } = DateTime.UtcNow;
         public Guid TestId { set; get; }
     }
 }
