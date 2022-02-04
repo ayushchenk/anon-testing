@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers().AddFluentValidation(options =>
 {
-    options.RegisterValidatorsFromAssemblyContaining<TestValidator>();
+    options.RegisterValidatorsFromAssemblyContaining<TestDtoValidator>();
 });
 
 var jwtSettingsProvider = new JwtSettingsProvider(builder.Configuration);

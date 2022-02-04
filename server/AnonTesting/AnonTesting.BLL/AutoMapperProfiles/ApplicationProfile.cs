@@ -13,9 +13,7 @@ namespace AnonTesting.BLL.AutoMapperProfiles
 
             CreateMap<Question, QuestionDto>().ReverseMap();
 
-            CreateMap<Answer, AnswerDto>()
-                .ForMember(dest => dest.TestId, options => options.MapFrom(source => source.Question.TestId))
-                .ReverseMap();
+            CreateMap<Answer, AnswerDto>().ReverseMap();
 
             CreateMap<TestResult, TestResultDto>().ReverseMap();
 

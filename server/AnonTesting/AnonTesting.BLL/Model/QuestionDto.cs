@@ -9,5 +9,6 @@ namespace AnonTesting.BLL.Model
         public QuestionType QuestionType { set; get; }
         public string Content { set; get; } = null!;
         public Guid TestId { set; get; }
+        public IEnumerable<AnswerDto> Answers { set; get; } = null!;
     }
 }
