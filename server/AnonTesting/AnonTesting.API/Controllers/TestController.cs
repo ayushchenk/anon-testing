@@ -47,5 +47,21 @@ namespace AnonTesting.API.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("complete")]
+        public async Task<IActionResult> Complete([FromBody] CompleteTestCommand command)
+        {
+            try
+            {
+                var testResult = await _mediator.Send(command);
+
+                return CreatedAtAction("complete", testResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
