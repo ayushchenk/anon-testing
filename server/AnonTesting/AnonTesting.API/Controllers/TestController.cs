@@ -34,17 +34,17 @@ namespace AnonTesting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TestDto body)
+        public async Task<IActionResult> Create([FromBody] TestDto body)
         {
             try
             {
                 Guid createdId = await _mediator.Send(new CreateTestCommand(body));
 
-                return CreatedAtAction(nameof(Post), createdId);
+                return CreatedAtAction(nameof(Create), createdId);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -56,9 +56,25 @@ namespace AnonTesting.API.Controllers
             {
                 var testResult = await _mediator.Send(command);
 
-                return CreatedAtAction("complete", testResult);
+                return CreatedAtAction(nameof(Complete), testResult);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var testDto = await _mediator.Send(new GetTestByIdQuery(id));
+
+                return Ok(testDto);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

@@ -2,7 +2,6 @@
 using AnonTesting.BLL.Interfaces.Commands;
 using AnonTesting.DAL.Model;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace AnonTesting.BLL.CommandHandlers.Question
 {
