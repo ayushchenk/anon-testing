@@ -19,7 +19,7 @@ namespace AnonTesting.BLL.Validators.Question
         private void ValidateAnswers()
         {
             ValidateWhenSingleAnswerType();
-            ValidateWhenMultipleAnswersType();
+            ValidateWhenMultipleAnswerType();
             ValidateWhenStringAnswerType();
         }
 
@@ -37,7 +37,7 @@ namespace AnonTesting.BLL.Validators.Question
             }).When(q => q.QuestionType == DAL.Model.QuestionType.SingleAnswer);
         }
 
-        private void ValidateWhenMultipleAnswersType()
+        private void ValidateWhenMultipleAnswerType()
         {
             RuleFor(q => q.Answers).Custom((answers, context) =>
             {
@@ -48,7 +48,7 @@ namespace AnonTesting.BLL.Validators.Question
                     context.AddFailure("Answers", "Multiple answers questions should have at least one correct answer");
                 }
 
-            }).When(q => q.QuestionType == DAL.Model.QuestionType.MultipleAnswers);
+            }).When(q => q.QuestionType == DAL.Model.QuestionType.MultipleAnswer);
         }
 
         private void ValidateWhenStringAnswerType()

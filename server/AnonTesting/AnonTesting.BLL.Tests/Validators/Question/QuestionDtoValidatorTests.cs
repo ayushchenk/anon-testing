@@ -107,7 +107,7 @@ namespace AnonTesting.BLL.Tests.Validators.Question
             var question = new QuestionDto()
             {
                 Content = "question",
-                QuestionType = DAL.Model.QuestionType.MultipleAnswers,
+                QuestionType = DAL.Model.QuestionType.MultipleAnswer,
                 Answers = new List<AnswerDto>()
                 {
                     new AnswerDto()
@@ -137,7 +137,7 @@ namespace AnonTesting.BLL.Tests.Validators.Question
             var question = new QuestionDto()
             {
                 Content = "question",
-                QuestionType = DAL.Model.QuestionType.MultipleAnswers,
+                QuestionType = DAL.Model.QuestionType.MultipleAnswer,
                 Answers = new List<AnswerDto>()
                 {
                     new AnswerDto()
@@ -167,7 +167,7 @@ namespace AnonTesting.BLL.Tests.Validators.Question
             var question = new QuestionDto()
             {
                 Content = "question",
-                QuestionType = DAL.Model.QuestionType.MultipleAnswers,
+                QuestionType = DAL.Model.QuestionType.MultipleAnswer,
                 Answers = new List<AnswerDto>()
                 {
                     new AnswerDto()
@@ -203,7 +203,7 @@ namespace AnonTesting.BLL.Tests.Validators.Question
                     new AnswerDto()
                     {
                         Content = "answer1",
-                        IsCorrect = false
+                        IsCorrect = true
                     }
                 }
             };

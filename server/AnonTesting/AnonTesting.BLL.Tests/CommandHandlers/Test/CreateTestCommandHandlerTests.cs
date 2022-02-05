@@ -19,13 +19,14 @@ namespace AnonTesting.BLL.Tests.CommandHandlers.Test
         {
             //arrange
             var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<TestDto, DAL.Model.Test>(It.IsAny<TestDto>())).Returns(new DAL.Model.Test()
-            {
-                Id = Guid.NewGuid()
-            });
+            mapperMock.Setup(m => m.Map<TestDto, DAL.Model.Test>(It.IsAny<TestDto>())).Returns(new DAL.Model.Test());
 
             var dbSetMock = new Mock<DbSet<DAL.Model.Test>>();
-            dbSetMock.Setup(s => s.Add(It.IsAny<DAL.Model.Test>()));
+            dbSetMock.Setup(s => s.Add(It.IsAny<DAL.Model.Test>()))
+                .Callback<DAL.Model.Test>(test =>
+                {
+                    test.Id = Guid.NewGuid();
+                });
 
             var contextMock = new Mock<ApplicationContext>();
             contextMock.Setup(c => c.Tests).Returns(dbSetMock.Object);

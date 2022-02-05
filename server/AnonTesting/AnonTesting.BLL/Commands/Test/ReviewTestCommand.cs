@@ -1,11 +1,26 @@
-﻿using AnonTesting.BLL.Model;
+﻿using AnonTesting.BLL.Interfaces.Commands;
+using AnonTesting.BLL.Model;
 
 namespace AnonTesting.BLL.Commands.Test
 {
-    public class ReviewTestCommand : CompleteTestCommand
+    public class ReviewTestCommand : ICommand<TestResultDto>
     {
-        public ReviewTestCommand(CompleteTestCommand command) : base(command.TestId, command.ContestantName, command.Questions)
+        public Guid TestId { get; }
+        public string ContestantName { get; }
+        public IEnumerable<CompletedQuestion> Questions { get; }
+
+        public ReviewTestCommand(Guid testId, string contestantName, IEnumerable<CompletedQuestion> questions)
         {
+            TestId = testId;
+            ContestantName = contestantName;
+            Questions = questions;
+        }
+
+        public ReviewTestCommand(CompleteTestCommand completeCommand)
+        {
+            TestId = completeCommand.TestId;
+            ContestantName = completeCommand.ContestantName;
+            Questions = completeCommand.Questions;
         }
     }
 }

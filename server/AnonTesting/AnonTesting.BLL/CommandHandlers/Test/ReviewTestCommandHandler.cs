@@ -1,20 +1,21 @@
-﻿using AnonTesting.BLL.Commands.Test;
+﻿using AnonTesting.BLL.Commands.Question;
+using AnonTesting.BLL.Commands.Test;
 using AnonTesting.BLL.Interfaces.Commands;
 using AnonTesting.BLL.Model;
-using AnonTesting.DAL.Model;
 using AutoMapper;
+using MediatR;
 
 namespace AnonTesting.BLL.CommandHandlers.Test
 {
     public class ReviewTestCommandHandler : ICommandHandler<ReviewTestCommand, TestResultDto>
     {
-        private readonly ApplicationContext _context;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ReviewTestCommandHandler(ApplicationContext context, IMapper mapper)
+        public ReviewTestCommandHandler(IMapper mapper, IMediator mediator)
         {
-            _context = context;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<TestResultDto> Handle(ReviewTestCommand command, CancellationToken cancellationToken)
@@ -23,62 +24,15 @@ namespace AnonTesting.BLL.CommandHandlers.Test
 
             foreach (var completedQuestion in command.Questions)
             {
-                var originalQuestion = await _context.Questions.FindAsync(completedQuestion.QuestionId);
+                var isCorrect = await _mediator.Send(new ReviewQuestionCommand(completedQuestion));
 
-                if (originalQuestion == null)
-                {
-                    continue;
-                }
-
-                if (IsAnswerCorrect(completedQuestion, originalQuestion))
+                if (isCorrect)
                 {
                     result.CorrectQuestions++;
                 }
             }
 
             return result;
-        }
-
-        private bool IsAnswerCorrect(CompletedQuestion completedQuestion, Question originalQuestion)
-        {
-            //try
-            //{
-                switch (originalQuestion.QuestionType)
-                {
-                    case QuestionType.SingleAnswer: return CheckSingleAnswer(completedQuestion, originalQuestion);
-                    case QuestionType.MultipleAnswers: return CheckMultipleAnswers(completedQuestion, originalQuestion);
-                    case QuestionType.StringAnswer: return CheckStringAnswer(completedQuestion, originalQuestion);
-                    default: return false;
-                }
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
-        }
-
-        private bool CheckSingleAnswer(CompletedQuestion completedQuestion, Question originalQuestion)
-        {
-            var correctAnswer = originalQuestion.Answers.First(a => a.IsCorrect);
-
-            return completedQuestion.Answers!.First() == correctAnswer.Id;
-        }
-
-        private bool CheckMultipleAnswers(CompletedQuestion completedQuestion, Question originalQuestion)
-        {
-            var correctAnswersIds = originalQuestion.Answers
-                .Where(a => a.IsCorrect)
-                .Select(a => a.Id)
-                .OrderBy(a => a);
-
-            return Enumerable.SequenceEqual(correctAnswersIds, completedQuestion.Answers!.OrderBy(a => a));
-        }
-
-        private bool CheckStringAnswer(CompletedQuestion completedQuestion, Question originalQuestion)
-        {
-            var answerString = originalQuestion.Answers.First().Content.Trim().ToLower();
-
-            return completedQuestion.AnswerString?.Trim().ToLower() == answerString;
         }
     }
 }

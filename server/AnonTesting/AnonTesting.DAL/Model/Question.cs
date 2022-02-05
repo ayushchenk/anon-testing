@@ -25,7 +25,7 @@ namespace AnonTesting.DAL.Model
     public enum QuestionType : byte
     {
         SingleAnswer = 0,
-        MultipleAnswers = 1,
+        MultipleAnswer = 1,
         StringAnswer = 2
     }
 }
