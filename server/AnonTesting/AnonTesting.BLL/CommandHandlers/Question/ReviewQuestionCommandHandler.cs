@@ -2,6 +2,7 @@
 using AnonTesting.BLL.Interfaces.Commands;
 using AnonTesting.DAL.Model;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnonTesting.BLL.CommandHandlers.Question
 {
@@ -20,7 +21,7 @@ namespace AnonTesting.BLL.CommandHandlers.Question
         {
             var originalQuestion = await _context.Questions.FindAsync(command.CompletedQuestion.QuestionId);
 
-            if(originalQuestion == null)
+            if (originalQuestion == null)
             {
                 return false;
             }
@@ -33,7 +34,8 @@ namespace AnonTesting.BLL.CommandHandlers.Question
                     return await _mediator.Send(new ReviewMultipleAnswerQuestionCommand(command.CompletedQuestion, originalQuestion));
                 case QuestionType.StringAnswer:
                     return await _mediator.Send(new ReviewStringAnswerQuestionCommand(command.CompletedQuestion, originalQuestion));
-                default: return false;
+                default:
+                    return false;
             }
         }
     }

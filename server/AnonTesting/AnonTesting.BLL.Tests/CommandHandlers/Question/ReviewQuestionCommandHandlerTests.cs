@@ -45,7 +45,7 @@ namespace AnonTesting.BLL.Tests.CommandHandlers.Question
             _mediatorMock.Setup(m => m.Send(It.IsAny<ReviewSingleAnswerQuestionCommand>(), default)).ReturnsAsync(true);
             _questionDbSetMock.Setup(d => d.FindAsync(It.IsAny<Guid>())).ReturnsAsync(new DAL.Model.Question()
             {
-                QuestionType =  QuestionType.SingleAnswer
+                QuestionType = QuestionType.SingleAnswer
             });
 
             var command = new ReviewQuestionCommand(new CompletedQuestion());
