@@ -19,7 +19,7 @@ namespace AnonTesting.BLL.AutoMapperProfiles
             CreateMap<TestResult, TestResultDto>().ReverseMap();
 
             CreateMap<CreateUserCommand, User>()
-                .ForMember(dest => dest.UserName, options => options.MapFrom(source => source.Email));
+                .ForMember(command => command.UserName, options => options.MapFrom(user => user.Email));
 
             CreateMap<ReviewTestCommand, TestResultDto>();
         }
