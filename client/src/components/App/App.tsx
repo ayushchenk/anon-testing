@@ -9,6 +9,6 @@ export class App extends React.Component {
     }
 
     private registerHandler(): void {
-        alert("click");
+        console.log("registered");
     }
 }

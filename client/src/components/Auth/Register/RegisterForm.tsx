@@ -1,29 +1,40 @@
-import { Button, Container, FormLabel, Stack, TextField } from "@mui/material";
+import { Alert, Button, Collapse, Container, FormLabel, Stack, TextField } from "@mui/material";
 import React from "react";
-import validator from "./RegisterForm.validator";
 import "./RegisterForm.css";
 import { ValidationError } from "yup";
+import validator from "./RegisterForm.validator";
+import { AuthService, IAuthService } from "../../../Services/AuthService";
+import { Token } from "../../../Model/Token";
 
 interface RegisterFormProps {
-    onRegister: () => void;
+    onRegister: (token: Token) => void;
 }
 
 interface RegisterFormState {
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
     valdiationEnabled: boolean;
+    showError: boolean;
+    error: string;
     emailValidation?: string;
     passwordValidation?: string;
     confirmPasswordValidation?: string;
 }
 
 export class RegisterForm extends React.Component<RegisterFormProps, RegisterFormState>{
+    private readonly authService: IAuthService = new AuthService();
+
     public constructor(props: RegisterFormProps) {
         super(props);
 
         this.state = {
-            valdiationEnabled: false
+            email: "",
+            password: "",
+            confirmPassword: "",
+            error: "",
+            valdiationEnabled: false,
+            showError: false
         };
     }
 
@@ -64,6 +75,9 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         helperText={this.state.valdiationEnabled ? this.state.confirmPasswordValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "confirmPassword")}
                     />
+                    <Collapse in={this.state.showError} className="registe-form__error-field">
+                        <Alert severity="error"> {this.state.error} </Alert>
+                    </Collapse>
                     <Button
                         onClick={() => this.handleSubmit()}
                         variant="outlined">
@@ -75,14 +89,32 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     }
 
     private handleSubmit(): void {
-        if (!this.state.valdiationEnabled) {
-            this.setState({
-                valdiationEnabled: true
-            }, this.validateInput);
-        }
+        this.setState({
+            valdiationEnabled: true
+        }, this.validateEndSend);
+    }
 
-        if(this.validateInput()){
-            alert("valid!");
+    private validateEndSend(): void {
+        if (this.validateInput()) {
+            this.authService.register({
+                email: this.state.email,
+                password: this.state.password
+            }).then(response => {
+                if (response instanceof Token) {
+                    this.props.onRegister(response);
+                    return;
+                }
+
+                this.setState({
+                    error: response.error!,
+                    showError: true
+                }, () => setTimeout(
+                    () => this.setState({ showError: false }),
+                    5000)
+                );
+
+                console.log(response);
+            });
         }
     }
 
