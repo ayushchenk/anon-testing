@@ -8,7 +8,7 @@ namespace AnonTesting.BLL.Model
         public string Issuer { set; get; } = String.Empty;
         public string Audience { set; get; } = String.Empty;
         public string Key { set; get; } = String.Empty;
-        public int ExpiresMinutes { get; set; }
+        public int ExpiresMinutes { get; set; } = 60;
 
         public SymmetricSecurityKey SigningKey => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
     }

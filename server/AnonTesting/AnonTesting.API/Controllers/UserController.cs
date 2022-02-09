@@ -1,7 +1,6 @@
 ﻿using AnonTesting.BLL.Commands.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace AnonTesting.API.Controllers
 {
@@ -10,44 +9,38 @@ namespace AnonTesting.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly JwtSecurityTokenHandler _tokenHandler;
 
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
-            _tokenHandler = new JwtSecurityTokenHandler();
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-            try
-            {
-                var token = await _mediator.Send(command);
+            var tokenResult = await _mediator.Send(command);
 
-                return Ok(_tokenHandler.WriteToken(token));
-            }
-            catch(Exception ex)
+            if (tokenResult.IsSuccess)
             {
-                return BadRequest(ex.Message);
+                return Ok(tokenResult.Value);
             }
+
+            return BadRequest(tokenResult);
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Register([FromBody] LoginUserCommand command)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            try
-            {
-                var token = await _mediator.Send(command);
+            var tokenResult = await _mediator.Send(command);
 
-                return Ok(_tokenHandler.WriteToken(token));
-            }
-            catch (Exception ex)
+            if (tokenResult.IsSuccess)
             {
-                return BadRequest(ex.Message);
+                return Ok(tokenResult.Value);
             }
+
+            return BadRequest(tokenResult);
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using AnonTesting.BLL.Interfaces.Commands;
-using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
+using AnonTesting.BLL.Model;
 
 namespace AnonTesting.BLL.Commands.Jwt
 {
-    public class GenerateTokenCommand : ICommand<JwtSecurityToken>
+    public class GenerateTokenCommand : ICommand<Token>
     {
-        public string UserEmail { get; }
+        public DAL.Model.User User { get; }
         public IEnumerable<string> UserRoles { get; }
 
-        public GenerateTokenCommand(string email, IEnumerable<string> roles)
+        public GenerateTokenCommand(DAL.Model.User user, IEnumerable<string> roles)
         {
-            UserEmail = email;
+            User = user;
             UserRoles = roles;
         }
     }
