@@ -1,11 +1,10 @@
 ﻿using AnonTesting.BLL.Interfaces.Commands;
 using AnonTesting.BLL.Model;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 
 namespace AnonTesting.BLL.Commands.User
 {
-    public class LoginUserCommand : AuthBase, ICommand<JwtSecurityToken>
+    public class LoginUserCommand : AuthBase, ICommand<Result<Token>>
     {
         public LoginUserCommand(AuthBase auth) : base(auth)
         {

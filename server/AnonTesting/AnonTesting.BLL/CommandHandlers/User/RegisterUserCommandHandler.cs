@@ -1,12 +1,11 @@
 ﻿using AnonTesting.BLL.Commands.User;
-using AnonTesting.BLL.Exceptions.User;
 using AnonTesting.BLL.Interfaces.Commands;
+using AnonTesting.BLL.Model;
 using MediatR;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace AnonTesting.BLL.CommandHandlers.User
 {
-    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, JwtSecurityToken>
+    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Result<Token>>
     {
         private readonly IMediator _mediator;
 
@@ -15,16 +14,17 @@ namespace AnonTesting.BLL.CommandHandlers.User
             _mediator = mediator;
         }
 
-        public async Task<JwtSecurityToken> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Token>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
         {
             var createResult = await _mediator.Send(new CreateUserCommand(command));
 
-            if (!createResult.Succeeded)
+            if (createResult != null && createResult.Succeeded)
             {
-                throw new UnableToCreateUserException(createResult.Errors);
+                return await _mediator.Send(new LoginUserCommand(command));
             }
 
-            return await _mediator.Send(new LoginUserCommand(command));
+            string error = createResult?.Errors.FirstOrDefault()?.Description ?? string.Empty;
+            return Result.Failure<Token>(error);
         }
     }
 }

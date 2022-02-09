@@ -1,14 +1,13 @@
 ﻿using AnonTesting.BLL.Commands.Jwt;
 using AnonTesting.BLL.Commands.User;
-using AnonTesting.BLL.Exceptions.User;
 using AnonTesting.BLL.Interfaces.Commands;
+using AnonTesting.BLL.Model;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace AnonTesting.BLL.CommandHandlers.User
 {
-    public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, JwtSecurityToken>
+    public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<Token>>
     {
         private readonly UserManager<DAL.Model.User> _manager;
         private readonly IMediator _mediator;
@@ -19,7 +18,7 @@ namespace AnonTesting.BLL.CommandHandlers.User
             _mediator = mediator;
         }
 
-        public async Task<JwtSecurityToken> Handle(LoginUserCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Token>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
         {
             var user = await _manager.FindByEmailAsync(command.Email);
 
@@ -27,12 +26,14 @@ namespace AnonTesting.BLL.CommandHandlers.User
             {
                 var userRoles = await _manager.GetRolesAsync(user);
 
-                var tokenCommand = new GenerateTokenCommand(user.Email, userRoles);
+                var tokenCommand = new GenerateTokenCommand(user, userRoles);
 
-                return await _mediator.Send(tokenCommand);
+                var token = await _mediator.Send(tokenCommand);
+
+                return Result.Success(token);
             }
 
-            throw new UserNotFoundException();
+            return Result.Failure<Token>("User does not exist");
         }
     }
 }

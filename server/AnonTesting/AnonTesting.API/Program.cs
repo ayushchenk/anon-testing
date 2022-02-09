@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +48,8 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     options.Password.RequireNonAlphanumeric = false;
 }).AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddAutoMapper(typeof(ApplicationProfile));
-builder.Services.AddSingleton<IJwtSettingsProvider, JwtSettingsProvider>();
+builder.Services.AddScoped<SecurityTokenHandler, JwtSecurityTokenHandler>();
+builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
 builder.Services.AddMediatR(typeof(IDto).GetTypeInfo().Assembly);
 
 var app = builder.Build();

@@ -1,7 +1,7 @@
 ﻿using AnonTesting.BLL.CommandHandlers.User;
 using AnonTesting.BLL.Commands.Jwt;
 using AnonTesting.BLL.Commands.User;
-using AnonTesting.BLL.Exceptions.User;
+using AnonTesting.BLL.Model;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,7 +40,7 @@ namespace AnonTesting.BLL.Tests.CommandHandlers.User
         {
             //arrange
             _mediatorMock.Setup(m => m.Send(It.IsAny<GenerateTokenCommand>(), default))
-                .ReturnsAsync(new JwtSecurityToken());
+                .ReturnsAsync(new Token());
 
             var returnedUser = new DAL.Model.User();
 
@@ -67,7 +67,6 @@ namespace AnonTesting.BLL.Tests.CommandHandlers.User
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotFoundException))]
         public async Task Handle_CommandWithExistingUserAndWrongPassword_ShouldThrowUserNotFoundException()
         {
             //arrange
@@ -84,7 +83,6 @@ namespace AnonTesting.BLL.Tests.CommandHandlers.User
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotFoundException))]
         public async Task Handle_CommandWithNotExistingUser_ShouldThrowUserNotFoundException()
         {
 #pragma warning disable CS8620
