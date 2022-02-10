@@ -27,8 +27,8 @@ export class AuthService {
             const responseBody = await response.json();
 
             return response.ok
-                ? responseBody as Token
-                : responseBody as ErrorResponse;
+                ? new Token(responseBody.value, responseBody.userId, responseBody.expiresOn)
+                : new ErrorResponse(responseBody.error, responseBody.errors);
         }
         catch (error) {
             console.log(error);

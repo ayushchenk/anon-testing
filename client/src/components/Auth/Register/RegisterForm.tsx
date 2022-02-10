@@ -95,11 +95,8 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
-                console.log(response);
-
                 if (response instanceof Token) {
                     this.props.onRegister(response);
-                    return;
                 }
 
                 if (response instanceof ErrorResponse) {

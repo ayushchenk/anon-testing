@@ -87,11 +87,8 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
-                console.log(response);
-
                 if (response instanceof Token) {
                     this.props.onLogin(response);
-                    return;
                 }
 
                 if (response instanceof ErrorResponse) {
