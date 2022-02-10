@@ -1,35 +1,38 @@
 import { Alert, Button, Collapse, Container, FormLabel, Stack, TextField } from "@mui/material";
 import React from "react";
-import "./RegisterForm.css";
 import { ValidationError } from "yup";
-import validator from "./RegisterForm.validator";
-import { AuthService } from "../../../Services/AuthService";
-import { Token } from "../../../Model/Token";
-import { LoginFormState } from "../Login/LoginForm";
 import { ErrorResponse } from "../../../Model/ErrorResponse";
+import { Token } from "../../../Model/Token";
+import { AuthService } from "../../../Services/AuthService";
+import "../Register/RegisterForm.css";
+import validator from "./LoginForm.validator";
 
-export interface RegisterFormProps {
-    onRegister: (token: Token) => void;
+export interface LoginFormProps {
+    onLogin: (token: Token) => void;
 }
 
-export interface RegisterFormState extends LoginFormState {
-    confirmPassword: string;
-    confirmPasswordValidation?: string;
+export interface LoginFormState {
+    email: string;
+    password: string;
+    valdiationEnabled: boolean;
+    error: string;
+    showError: boolean;
+    emailValidation?: string;
+    passwordValidation?: string;
 }
 
-export class RegisterForm extends React.Component<RegisterFormProps, RegisterFormState>{
+export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
     private readonly authService = new AuthService();
 
-    public constructor(props: RegisterFormProps) {
+    public constructor(props: LoginFormProps) {
         super(props);
 
         this.state = {
             email: "",
             password: "",
-            confirmPassword: "",
             error: "",
-            valdiationEnabled: false,
-            showError: false
+            showError: false,
+            valdiationEnabled: false
         };
     }
 
@@ -37,7 +40,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         return (
             <Container maxWidth="xs" className="register-form">
                 <Stack>
-                    <FormLabel>Register</FormLabel>
+                    <FormLabel>Login</FormLabel>
                     <TextField
                         variant="outlined"
                         label="Email"
@@ -58,17 +61,6 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         error={this.state.passwordValidation !== undefined && this.state.valdiationEnabled}
                         helperText={this.state.valdiationEnabled ? this.state.passwordValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "password")}
-                    />
-                    <TextField
-                        variant="outlined"
-                        label="Confirm password"
-                        type="password"
-                        margin="dense"
-                        size="small"
-                        required
-                        error={this.state.confirmPasswordValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.confirmPasswordValidation : ""}
-                        onChange={(event) => this.handleFieldChange(event, "confirmPassword")}
                     />
                     <Collapse in={this.state.showError} className="register-form__error-field">
                         <Alert severity="error"> {this.state.error} </Alert>
@@ -91,14 +83,14 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
 
     private validateEndSend(): void {
         if (this.validateInput()) {
-            this.authService.register({
+            this.authService.login({
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
                 console.log(response);
 
                 if (response instanceof Token) {
-                    this.props.onRegister(response);
+                    this.props.onLogin(response);
                     return;
                 }
 
@@ -122,8 +114,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
 
                 this.setState({
                     emailValidation: undefined,
-                    passwordValidation: undefined,
-                    confirmPasswordValidation: undefined
+                    passwordValidation: undefined
                 });
 
                 return true;
@@ -133,7 +124,6 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                     this.setState({
                         emailValidation: error.inner.find(e => e.path === "email")?.message,
                         passwordValidation: error.inner.find(e => e.path === "password")?.message,
-                        confirmPasswordValidation: error.inner.find(e => e.path === "confirmPassword")?.message,
                     });
                 }
 
@@ -144,7 +134,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         return false;
     }
 
-    private handleFieldChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof RegisterFormState): void {
+    private handleFieldChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof LoginFormState): void {
         this.setState((state) => {
             return {
                 ...state,
