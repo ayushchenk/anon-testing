@@ -51,6 +51,15 @@ builder.Services.AddAutoMapper(typeof(ApplicationProfile));
 builder.Services.AddScoped<SecurityTokenHandler, JwtSecurityTokenHandler>();
 builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
 builder.Services.AddMediatR(typeof(IDto).GetTypeInfo().Assembly);
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin();
+        builder.AllowAnyMethod();
+        builder.AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -59,6 +68,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors();
 }
 
 app.UseHttpsRedirection();
