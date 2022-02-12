@@ -1,19 +1,36 @@
 import { AuthBase } from "../Model/AuthBase";
-import { ErrorResponse } from "../Model/ErrorResponse";
+import { Response } from "../Model/Response";
 import { Token } from "../Model/Token";
 
 export class AuthService {
     private readonly ApiUrl = "https://localhost:7063/api/user";
+    private readonly StorageKey = "token";
 
-    public register(model: AuthBase): Promise<Token | ErrorResponse> {
+    public register(model: AuthBase): Promise<Response<Token | undefined>> {
         return this.call(model, "register");
     }
 
-    public login(model: AuthBase): Promise<Token | ErrorResponse> {
+    public login(model: AuthBase): Promise<Response<Token | undefined>> {
         return this.call(model, "login");
     }
 
-    private async call(model: AuthBase, path: string): Promise<Token | ErrorResponse> {
+    public logout(): void {
+        localStorage.clear();
+    }
+
+    public isAuthenticated(): boolean {
+        const tokenJson = localStorage.getItem(this.StorageKey);
+
+        if (tokenJson === null) {
+            return false;
+        }
+
+        const token = JSON.parse(tokenJson) as Token;
+
+        return token.expiresOn > new Date();
+    }
+
+    private async call(model: AuthBase, path: string): Promise<Response<Token | undefined>> {
         try {
 
             const response = await fetch(`${this.ApiUrl}/${path}`, {
@@ -26,13 +43,24 @@ export class AuthService {
 
             const responseBody = await response.json();
 
-            return response.ok
-                ? new Token(responseBody.value, responseBody.userId, responseBody.expiresOn)
-                : new ErrorResponse(responseBody.error, responseBody.errors);
+            if (response.ok) {
+                console.log(new Date(responseBody.expiresOn));
+                console.log(responseBody);
+                
+                const token = new Token(responseBody.value, responseBody.userId, new Date(responseBody.expiresOn));
+                this.saveToken(token);
+                return Response.ok(token);
+            }
+
+            return Response.fail(responseBody.error, responseBody.errors);
         }
         catch (error) {
             console.log(error);
-            return new ErrorResponse("Unsuccessful request"); 
+            return Response.fail("Unsuccessful request");
         }
+    }
+
+    private saveToken(token: Token): void {
+        localStorage.setItem(this.StorageKey, JSON.stringify(token));
     }
 }

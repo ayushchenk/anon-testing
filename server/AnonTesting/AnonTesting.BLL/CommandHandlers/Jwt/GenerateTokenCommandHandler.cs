@@ -48,7 +48,7 @@ namespace AnonTesting.BLL.CommandHandlers.Jwt
             {
                 Value = tokenValue,
                 UserId = command.User.Id,
-                ExpriesOn = securityToken.ValidTo
+                ExpiresOn = securityToken.ValidTo
             };
 
             return Task.FromResult(token);

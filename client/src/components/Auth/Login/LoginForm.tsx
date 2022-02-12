@@ -1,7 +1,7 @@
 import { Alert, Button, Collapse, Container, FormLabel, Stack, TextField } from "@mui/material";
 import React from "react";
 import { ValidationError } from "yup";
-import { ErrorResponse } from "../../../Model/ErrorResponse";
+import { Response } from "../../../Model/Response";
 import { Token } from "../../../Model/Token";
 import { AuthService } from "../../../Services/AuthService";
 import "../Register/RegisterForm.css";
@@ -87,19 +87,18 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
-                if (response instanceof Token) {
-                    this.props.onLogin(response);
+                if (response.ok) {
+                    this.props.onLogin(response.value!);
+                    return;
                 }
 
-                if (response instanceof ErrorResponse) {
-                    this.setState({
-                        error: response.error!,
-                        showError: true
-                    }, () => setTimeout(
-                        () => this.setState({ showError: false }),
-                        5000)
-                    );
-                }
+                this.setState({
+                    error: response.error!,
+                    showError: true
+                }, () => setTimeout(
+                    () => this.setState({ showError: false }),
+                    5000)
+                );
             });
         }
     }
