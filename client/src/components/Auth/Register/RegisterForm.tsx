@@ -6,7 +6,6 @@ import validator from "./RegisterForm.validator";
 import { AuthService } from "../../../Services/AuthService";
 import { Token } from "../../../Model/Token";
 import { LoginFormState } from "../Login/LoginForm";
-import { Response } from "../../../Model/Response";
 
 export interface RegisterFormProps {
     onRegister: (token: Token) => void;

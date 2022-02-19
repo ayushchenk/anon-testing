@@ -1,11 +1,12 @@
 import React from "react";
-import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import AppContext, { ApplicationContext } from "../../Contexts/AppContext";
 import { Token } from "../../Model/Token";
 import { AuthService } from "../../Services/AuthService";
 import { LoginForm } from "../Auth/Login/LoginForm";
 import { RegisterForm } from "../Auth/Register/RegisterForm";
 import { Header } from "../Header/Header";
+import { CreateTestForm } from "../Test/CreateTest/CreateTestForm";
 
 interface AppState extends ApplicationContext {
 }
@@ -23,6 +24,7 @@ export class App extends React.Component<{}, AppState> {
     public render(): React.ReactNode {
         const loginForm = <LoginForm onLogin={(token) => this.loginHandler(token)} />;
         const registerForm = <RegisterForm onRegister={(token) => this.registerHandler(token)} />;
+        const createTestForm = <CreateTestForm />;
 
         return (
             <AppContext.Provider value={this.state}>
@@ -30,6 +32,7 @@ export class App extends React.Component<{}, AppState> {
                 <Routes>
                     <Route path="/login" element={loginForm} />
                     <Route path="/register" element={registerForm} />
+                    <Route path="/create" element={createTestForm} />
                 </Routes>
             </AppContext.Provider>
         );

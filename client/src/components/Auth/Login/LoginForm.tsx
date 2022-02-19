@@ -1,7 +1,6 @@
 import { Alert, Button, Collapse, Container, FormLabel, Stack, TextField } from "@mui/material";
 import React from "react";
 import { ValidationError } from "yup";
-import { Response } from "../../../Model/Response";
 import { Token } from "../../../Model/Token";
 import { AuthService } from "../../../Services/AuthService";
 import "../Register/RegisterForm.css";
