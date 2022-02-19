@@ -18,16 +18,20 @@ export class AuthService {
         localStorage.clear();
     }
 
-    public isAuthenticated(): boolean {
+    public getToken(): Token | undefined {
         const tokenJson = localStorage.getItem(this.StorageKey);
 
         if (tokenJson === null) {
-            return false;
+            return undefined;
         }
 
-        const token = JSON.parse(tokenJson) as Token;
+        return JSON.parse(tokenJson) as Token;
+    }
 
-        return token.expiresOn > new Date();
+    public isAuthenticated(): boolean {
+        const token = this.getToken();
+
+        return token !== undefined && token.expiresOn > new Date();
     }
 
     private async call(model: AuthBase, path: string): Promise<Response<Token | undefined>> {
@@ -46,7 +50,7 @@ export class AuthService {
             if (response.ok) {
                 console.log(new Date(responseBody.expiresOn));
                 console.log(responseBody);
-                
+
                 const token = new Token(responseBody.value, responseBody.userId, new Date(responseBody.expiresOn));
                 this.saveToken(token);
                 return Response.ok(token);

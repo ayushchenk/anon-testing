@@ -6,7 +6,7 @@ import { AuthService } from "../../Services/AuthService";
 import { LoginForm } from "../Auth/Login/LoginForm";
 import { RegisterForm } from "../Auth/Register/RegisterForm";
 import { Header } from "../Header/Header";
-import { CreateTestForm } from "../Test/CreateTest/CreateTestForm";
+import { CreateTestForm } from "../Test/Create/CreateTestForm";
 
 interface AppState extends ApplicationContext {
 }
