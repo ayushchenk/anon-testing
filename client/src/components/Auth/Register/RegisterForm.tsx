@@ -6,7 +6,7 @@ import validator from "./RegisterForm.validator";
 import { AuthService } from "../../../Services/AuthService";
 import { Token } from "../../../Model/Token";
 import { LoginFormState } from "../Login/LoginForm";
-import { ErrorResponse } from "../../../Model/ErrorResponse";
+import { Response } from "../../../Model/Response";
 
 export interface RegisterFormProps {
     onRegister: (token: Token) => void;
@@ -95,19 +95,18 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
-                if (response instanceof Token) {
-                    this.props.onRegister(response);
+                if (response.ok) {
+                    this.props.onRegister(response.value!);
+                    return;
                 }
 
-                if (response instanceof ErrorResponse) {
-                    this.setState({
-                        error: response.error!,
-                        showError: true
-                    }, () => setTimeout(
-                        () => this.setState({ showError: false }),
-                        5000)
-                    );
-                }
+                this.setState({
+                    error: response.error!,
+                    showError: true
+                }, () => setTimeout(
+                    () => this.setState({ showError: false }),
+                    5000)
+                );
             });
         }
     }
