@@ -74,6 +74,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                         required
                         size="small"
                         value={this.state.question.questionType}
+                        style={{ marginTop: "5px" }}
                         margin="dense"
                         onChange={(e) => this.setQuestionType(e)}>
                         <MenuItem value={QuestionType.Single}>Single Answer</MenuItem>
@@ -91,7 +92,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                         <label className="validation">{this.state.answersValidation}</label>
                     }
                 </FormControl>
-                <hr className="separator"/>
+                <hr className="separator" />
             </>
         );
     }

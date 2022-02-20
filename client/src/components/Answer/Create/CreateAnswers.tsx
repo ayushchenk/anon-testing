@@ -48,7 +48,7 @@ export class CreateAnswers extends React.Component<CreateAnswersProps> {
         });
 
         return (
-            <RadioGroup>
+            <RadioGroup style={{ marginTop: answers.length > 0 ? "15px" : "0" }}>
                 {answers}
             </RadioGroup>
         );
