@@ -1,9 +1,8 @@
-import { Button, FormControl, FormGroup, FormLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material";
+import { Button, FormControl, FormLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material";
 import React from "react";
-import { NewAnswer } from "../../../Model/CreateTest/NewAnswer";
 import { NewQuestion, QuestionType } from "../../../Model/CreateTest/NewQuestion";
-import { CreateAnswerForm } from "../../Answer/Create/CreateAnswerForm";
-import { DisplayAnswers } from "../../Answer/Display/DisplayAnswers";
+import { NewAnswer } from "../../../Model/CreateTest/NewAnswer";
+import { CreateAnswers } from "../../Answer/Create/CreateAnswers";
 
 export interface CreateQuestionFormProps {
     onSave: (question: NewQuestion) => void;
@@ -12,7 +11,6 @@ export interface CreateQuestionFormProps {
 
 interface CreateQuestionFormState {
     question: NewQuestion;
-    createAnswer: boolean;
 }
 
 export class CreateQuestionForm extends React.Component<CreateQuestionFormProps, CreateQuestionFormState> {
@@ -20,7 +18,6 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
         super(props);
 
         this.state = {
-            createAnswer: false,
             question: {
                 content: "",
                 questionType: QuestionType.Single,
@@ -73,14 +70,12 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                         <MenuItem value={QuestionType.Multiple}>Multiple Answer</MenuItem>
                         <MenuItem value={QuestionType.String}>String Answer</MenuItem>
                     </Select>
-                    <DisplayAnswers answers={this.state.question.answers} />
-                    {
-                        this.state.createAnswer &&
-                        <CreateAnswerForm
-                            questionType={this.state.question.questionType}
-                            onSave={(a) => this.saveAnswer(a)}
-                            onCancel={() => this.cancelAnswer()} />
-                    }
+                    <CreateAnswers
+                        answersCount={this.state.question.answers.length}
+                        questionType={this.state.question.questionType}
+                        onDelete={(i) => this.deleteAnswer(i)}
+                        onContentChange={(content, i) => this.setAnswerContent(content, i)}
+                        onCorrectChange={(checked, i) => this.setAnswerCorrect(checked, i)} />
                 </FormControl>
                 <hr />
             </>
@@ -92,33 +87,96 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
     }
 
     private addAnswer(): void {
-        this.setState({
-            createAnswer: true
+        this.setState((prevState) => {
+            return {
+                question: {
+                    ...prevState.question,
+                    answers: [...prevState.question.answers, {
+                        content: "",
+                        isCorrect: false
+                    }]
+                }
+            };
         });
     }
 
-    private saveAnswer(answer: NewAnswer): void {
-        this.state.question.answers.push(answer);
-        this.setState({
-            createAnswer: false
-        });
-    }
-
-    private cancelAnswer(): void {
-        this.setState({
-            createAnswer: false
-        });
-    }
-
-    private setQuestionType(event: SelectChangeEvent<QuestionType>): void {
+    private deleteAnswer(index: number): void {
         this.setState((state) => {
             return {
                 question: {
                     ...state.question,
-                    questionType: event.target.value as QuestionType
+                    answers: state.question.answers.filter((_, i) => i !== index)
+                }
+            };
+        });
+    }
+
+    private setAnswerContent(content: string, index: number): void {
+        const answers = [...this.state.question.answers];
+
+        const updatedAnswer: NewAnswer = {
+            ...answers[index],
+            content: content
+        };
+
+        answers[index] = updatedAnswer;
+
+        this.setState((prevState) => {
+            return {
+                question: {
+                    ...prevState.question,
+                    answers: answers
                 }
             }
         });
+    }
+
+    private setAnswerCorrect(checked: boolean, index: number): void {
+        let answers = [...this.state.question.answers];
+
+        if (this.state.question.questionType === QuestionType.Single) {
+            answers = answers.map(a => {
+                return {
+                    ...a,
+                    isCorrect: false
+                }
+            });
+        }
+
+        const updatedAnswer: NewAnswer = {
+            ...answers[index],
+            isCorrect: checked
+        };
+
+        answers[index] = updatedAnswer;
+
+        this.setState((prevState) => {
+            return {
+                question: {
+                    ...prevState.question,
+                    answers: answers
+                }
+            }
+        });
+    }
+
+    private setQuestionType(event: SelectChangeEvent<QuestionType>): void {
+        const answers = this.state.question.answers.map(a => {
+            return {
+                ...a,
+                isCorrect: false
+            }
+        });
+
+        this.setState((state) => {
+            return {
+                question: {
+                    ...state.question,
+                    answers: answers,
+                    questionType: event.target.value as QuestionType
+                }
+            }
+        }, () => console.log(this.state.question));
     }
 
     private setQuestionContent(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
