@@ -27,7 +27,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             password: "",
             confirmPassword: "",
             error: "",
-            valdiationEnabled: false,
+            validationEnabled: false,
             showError: false
         };
     }
@@ -43,8 +43,8 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         size="small"
                         margin="dense"
                         required
-                        error={this.state.emailValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.emailValidation : ""}
+                        error={this.state.emailValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.emailValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "email")}
                     />
                     <TextField
@@ -54,8 +54,8 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         margin="dense"
                         size="small"
                         required
-                        error={this.state.passwordValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.passwordValidation : ""}
+                        error={this.state.passwordValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.passwordValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "password")}
                     />
                     <TextField
@@ -65,8 +65,8 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
                         margin="dense"
                         size="small"
                         required
-                        error={this.state.confirmPasswordValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.confirmPasswordValidation : ""}
+                        error={this.state.confirmPasswordValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.confirmPasswordValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "confirmPassword")}
                     />
                     <Collapse in={this.state.showError} className="register-form__error-field">
@@ -84,11 +84,11 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
 
     private handleSubmit(): void {
         this.setState({
-            valdiationEnabled: true
-        }, this.validateEndSend);
+            validationEnabled: true
+        }, this.validateAndSend);
     }
 
-    private validateEndSend(): void {
+    private validateAndSend(): void {
         if (this.validateInput()) {
             this.authService.register({
                 email: this.state.email,
@@ -111,7 +111,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     }
 
     private validateInput(): boolean {
-        if (this.state.valdiationEnabled) {
+        if (this.state.validationEnabled) {
             try {
                 validator.validateSync(this.state, { abortEarly: false });
 

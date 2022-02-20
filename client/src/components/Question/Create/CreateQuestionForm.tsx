@@ -3,6 +3,8 @@ import React from "react";
 import { NewQuestion, QuestionType } from "../../../Model/CreateTest/NewQuestion";
 import { NewAnswer } from "../../../Model/CreateTest/NewAnswer";
 import { CreateAnswers } from "../../Answer/Create/CreateAnswers";
+import { QuestionValidator } from "./CreateQuestionForm.validator";
+import "./CreateQuestionForm.css";
 
 export interface CreateQuestionFormProps {
     onSave: (question: NewQuestion) => void;
@@ -11,13 +13,19 @@ export interface CreateQuestionFormProps {
 
 interface CreateQuestionFormState {
     question: NewQuestion;
+    contentValidation?: string;
+    answersValidation?: string;
+    validationEnabled: boolean;
 }
 
 export class CreateQuestionForm extends React.Component<CreateQuestionFormProps, CreateQuestionFormState> {
+    private readonly validator = new QuestionValidator();
+
     public constructor(props: CreateQuestionFormProps) {
         super(props);
 
         this.state = {
+            validationEnabled: false,
             question: {
                 content: "",
                 questionType: QuestionType.Single,
@@ -59,6 +67,8 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                         multiline={true}
                         maxRows={Infinity}
                         placeholder="Content"
+                        error={this.state.contentValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.contentValidation : ""}
                         onChange={(e) => this.setQuestionContent(e)} />
                     <Select
                         required
@@ -76,14 +86,39 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                         onDelete={(i) => this.deleteAnswer(i)}
                         onContentChange={(content, i) => this.setAnswerContent(content, i)}
                         onCorrectChange={(checked, i) => this.setAnswerCorrect(checked, i)} />
+                    {
+                        this.state.validationEnabled && this.state.answersValidation !== undefined &&
+                        <label className="validation">{this.state.answersValidation}</label>
+                    }
                 </FormControl>
-                <hr />
+                <hr className="separator"/>
             </>
         );
     }
 
     private save(): void {
-        this.props.onSave(this.state.question);
+        this.setState({
+            validationEnabled: true
+        }, () => {
+            if (this.validateInput()) {
+                this.props.onSave(this.state.question);
+            }
+        });
+    }
+
+    private validateInput(): boolean {
+        if (this.state.validationEnabled) {
+            const result = this.validator.validate(this.state.question);
+
+            this.setState({
+                contentValidation: result.get("content"),
+                answersValidation: result.get("answers")
+            });
+
+            return result.size === 0;
+        }
+
+        return false;
     }
 
     private addAnswer(): void {
@@ -97,7 +132,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     }]
                 }
             };
-        });
+        }, () => this.validateInput());
     }
 
     private deleteAnswer(index: number): void {
@@ -108,7 +143,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     answers: state.question.answers.filter((_, i) => i !== index)
                 }
             };
-        });
+        }, () => this.validateInput());
     }
 
     private setAnswerContent(content: string, index: number): void {
@@ -128,7 +163,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     answers: answers
                 }
             }
-        });
+        }, () => this.validateInput());
     }
 
     private setAnswerCorrect(checked: boolean, index: number): void {
@@ -157,7 +192,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     answers: answers
                 }
             }
-        });
+        }, () => this.validateInput());
     }
 
     private setQuestionType(event: SelectChangeEvent<QuestionType>): void {
@@ -176,7 +211,7 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     questionType: event.target.value as QuestionType
                 }
             }
-        }, () => console.log(this.state.question));
+        }, () => this.validateInput());
     }
 
     private setQuestionContent(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
@@ -187,6 +222,6 @@ export class CreateQuestionForm extends React.Component<CreateQuestionFormProps,
                     content: event.target.value
                 }
             }
-        });
+        }, () => this.validateInput());
     }
 }

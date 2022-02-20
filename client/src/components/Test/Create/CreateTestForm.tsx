@@ -57,7 +57,7 @@ export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
                     placeholder="Title"
                     fullWidth={true}
                     onChange={(e) => this.setTestTitle(e)} />
-                <hr />
+                <hr className="separator"/>
                 {
                     this.state.createQuestion &&
                     <CreateQuestionForm

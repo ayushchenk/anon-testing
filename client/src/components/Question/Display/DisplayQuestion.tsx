@@ -1,4 +1,4 @@
-import { FormControl, TextField } from "@mui/material";
+import { FormControl } from "@mui/material";
 import { NewQuestion, questionTypeDescription } from "../../../Model/CreateTest/NewQuestion";
 import { DisplayAnswers } from "../../Answer/Display/DisplayAnswers";
 import "./../../Answer/Display/DisplayAnswer.css";

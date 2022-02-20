@@ -13,7 +13,7 @@ export interface LoginFormProps {
 export interface LoginFormState {
     email: string;
     password: string;
-    valdiationEnabled: boolean;
+    validationEnabled: boolean;
     error: string;
     showError: boolean;
     emailValidation?: string;
@@ -31,7 +31,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
             password: "",
             error: "",
             showError: false,
-            valdiationEnabled: false
+            validationEnabled: false
         };
     }
 
@@ -46,8 +46,8 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
                         size="small"
                         margin="dense"
                         required
-                        error={this.state.emailValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.emailValidation : ""}
+                        error={this.state.emailValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.emailValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "email")}
                     />
                     <TextField
@@ -57,8 +57,8 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
                         margin="dense"
                         size="small"
                         required
-                        error={this.state.passwordValidation !== undefined && this.state.valdiationEnabled}
-                        helperText={this.state.valdiationEnabled ? this.state.passwordValidation : ""}
+                        error={this.state.passwordValidation !== undefined && this.state.validationEnabled}
+                        helperText={this.state.validationEnabled ? this.state.passwordValidation : ""}
                         onChange={(event) => this.handleFieldChange(event, "password")}
                     />
                     <Collapse in={this.state.showError} className="register-form__error-field">
@@ -76,7 +76,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 
     private handleSubmit(): void {
         this.setState({
-            valdiationEnabled: true
+            validationEnabled: true
         }, this.validateEndSend);
     }
 
@@ -103,7 +103,7 @@ export class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
     }
 
     private validateInput(): boolean {
-        if (this.state.valdiationEnabled) {
+        if (this.state.validationEnabled) {
             try {
                 validator.validateSync(this.state, { abortEarly: false });
 
