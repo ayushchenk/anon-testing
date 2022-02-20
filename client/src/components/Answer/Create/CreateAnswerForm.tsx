@@ -46,7 +46,7 @@ export class CreateAnswerForm extends React.Component<CreateAnswerFormProps, Cre
                 <IconButton onClick={() => this.props.onSave(this.state.answer)}>
                     <CheckCircle color="success" />
                 </IconButton>
-                <IconButton onClick={() => this.props.onSave(this.state.answer)}>
+                <IconButton onClick={() => this.props.onCancel()}>
                     <CancelIcon color="warning" />
                 </IconButton>
             </Stack>

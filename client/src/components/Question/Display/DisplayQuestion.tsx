@@ -11,26 +11,6 @@ interface DisplayQuestionProps {
 export function DisplayQuestion(props: DisplayQuestionProps) {
     return (
         <FormControl fullWidth={true}>
-            {/* <TextField
-                variant="standard"
-                size="small"
-                margin="dense"
-                multiline={true}
-                value={`${props.index + 1}. ${props.question.content}`}
-                maxRows={Infinity}
-                inputProps={
-                    { readOnly: true }
-                } />
-            <TextField
-                variant="standard"
-                size="small"
-                margin="dense"
-                multiline={true}
-                value={questionTypeDescription(props.question.questionType)}
-                maxRows={Infinity}
-                inputProps={
-                    { readOnly: true }
-                } /> */}
             <label className="display-answer__content">
                 {`${props.index + 1}. ${props.question.content}`}
             </label>
