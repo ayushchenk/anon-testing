@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const validator = Yup.object().shape({
+const validationSchema = Yup.object().shape({
     email: Yup.string()
         .nullable(true)
         .email("Should be valid email")
@@ -20,4 +20,4 @@ const validator = Yup.object().shape({
         .oneOf([Yup.ref("password")], "Passwords must match")
 });
 
-export default validator;
+export default validationSchema;

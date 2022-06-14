@@ -3,8 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import AppContext, { ApplicationContext } from "../../Contexts/AppContext";
 import { Token } from "../../Model/Token";
 import { AuthService } from "../../Services/AuthService";
-import { LoginForm } from "../Auth/Login/LoginForm";
-import { RegisterForm } from "../Auth/Register/RegisterForm";
+import { LoginForm } from "../Auth/LoginForm";
+import { RegisterForm } from "../Auth/RegisterForm";
 import { Header } from "../Header/Header";
 import { CreateTestForm } from "../Test/Create/CreateTestForm";
 
@@ -22,8 +22,8 @@ export class App extends React.Component<{}, AppState> {
     }
 
     public render(): React.ReactNode {
-        const loginForm = <LoginForm onLogin={(token) => this.loginHandler(token)} />;
-        const registerForm = <RegisterForm onRegister={(token) => this.registerHandler(token)} />;
+        const loginForm = <LoginForm onSubmit={(token) => this.loginHandler(token)} />;
+        const registerForm = <RegisterForm onSubmit={(token) => this.registerHandler(token)} />;
         const createTestForm = <CreateTestForm />;
 
         return (
