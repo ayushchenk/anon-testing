@@ -30,16 +30,15 @@ export class AuthService {
 
     public isAuthenticated(): boolean {
         const token = this.getToken();
-
         return token !== undefined && token.expiresOn > new Date();
     }
 
     private async call(model: AuthBase, path: string): Promise<Response<Token | undefined>> {
         try {
-
             const response = await fetch(`${this.ApiUrl}/${path}`, {
                 method: "POST",
-                body: JSON.stringify(model)
+                body: JSON.stringify(model),
+                headers: { "Content-Type": "application/json" }
             });
 
             const responseBody = await response.json();

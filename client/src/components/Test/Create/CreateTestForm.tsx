@@ -1,4 +1,4 @@
-import { Button, Container, FormHelperText, FormLabel, Stack, TextField } from "@mui/material";
+import { Alert, Button, Container, FormHelperText, FormLabel, Snackbar, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { NewQuestion } from "../../../Model/CreateTest/NewQuestion";
@@ -9,6 +9,8 @@ import { CreateQuestionForm } from "../../Question/Create";
 import { DisplayQuestions } from "../../Question/Display";
 import "./CreateTestForm.css";
 import validationSchema from "./CreateTestForm.validator";
+import { TestService } from "../../../Services/TestService";
+import { useNavigate } from "react-router-dom";
 
 interface CreateTestFormState {
     test: NewTest;
@@ -16,7 +18,10 @@ interface CreateTestFormState {
 }
 
 export function CreateTest() {
+    const navigate = useNavigate();
     const authService = new AuthService();
+    const testService = new TestService();
+    const [showAlert, setShowAlert] = useState(false);
     const [createQuestion, setCreateQuestion] = useState(false);
 
     const initValues: NewTest = {
@@ -28,13 +33,30 @@ export function CreateTest() {
     const formik = useFormik({
         initialValues: initValues,
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        validateOnBlur: false,
+        validateOnChange: false,
+        onSubmit: async (values) => {
             console.log(values);
+
+            const response = await testService.create(values);
+
+            if (!response?.ok) {
+                setShowAlert(true);
+                response?.json().then(console.log);
+            }
+            else{
+                navigate("/");
+            }
         }
     });
 
     return (
         <Container maxWidth="md" className="create-test-form">
+            <Snackbar open={showAlert} autoHideDuration={3500} onClose={() => setShowAlert(false)}>
+                <Alert severity="warning" sx={{ width: '100%' }} onClose={() => setShowAlert(false)}>
+                    Error while creating test
+                </Alert>
+            </Snackbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <FormLabel>New Test</FormLabel>
                 <span>

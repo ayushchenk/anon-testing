@@ -30,6 +30,7 @@ export class App extends React.Component<{}, AppState> {
             <AppContext.Provider value={this.state}>
                 <Header />
                 <Routes>
+                    <Route path="/" element={null} />
                     <Route path="/login" element={loginForm} />
                     <Route path="/register" element={registerForm} />
                     <Route path="/create" element={createTestForm} />
@@ -41,6 +42,7 @@ export class App extends React.Component<{}, AppState> {
     private registerHandler(token: Token): void {
         console.log("register");
         console.log(token);
+
     }
 
     private loginHandler(token: Token): void {
