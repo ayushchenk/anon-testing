@@ -7,7 +7,7 @@ interface DisplayAnswersProps {
 }
 
 export function DisplayAnswers(props: DisplayAnswersProps) {
-    var displays = props.answers.map((answer, index) => {
+    const displays = props.answers.map((answer, index) => {
         return <DisplayAnswer key={index} answer={answer} index={index} />;
     });
 

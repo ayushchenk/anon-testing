@@ -1,45 +1,41 @@
+import * as Yup from "yup";
 import { NewQuestion, QuestionType } from "../../../Model/CreateTest/NewQuestion";
 
-export class QuestionValidator {
-    public validate(question: NewQuestion): Map<string, string> {
-        const result = new Map<string, string>();
+const validationSchema = Yup.object<Record<keyof NewQuestion, Yup.AnySchema>>({
+    content: Yup
+        .string()
+        .required("Question content is required"),
 
-        if (!question.content) {
-            result.set("content", "Content is required");
-        }
+    questionType: Yup
+        .number()
+        .required("Type is requried"),
 
-        if (!question.answers) {
-            result.set("answers", "Answers is required");
-        }
-
-        if (question.answers) {
-            const emptyCount = question.answers.filter(a => !a.content).length;
-            if (emptyCount > 0) {
-                result.set("answers", "Answers cannot be empty");
+    answers: Yup
+        .array()
+        .required()
+        .test(
+            "all-answers-required",
+            "Answers are required",
+            answers => {
+                return answers?.filter(a => !a.content).length === 0;
             }
-
-            const correctCount = question.answers.filter(a => a.isCorrect).length;
-            switch (question.questionType) {
-                case QuestionType.Single:
-                    if (correctCount != 1) {
-                        result.set("answers", "Question should have one correct answer");
-                    }
-                    break;
-                case QuestionType.Multiple:
-                    if (correctCount === 0) {
-                        result.set("answers", "Question should have at least one correct answer");
-                    }
-                    break;
-                case QuestionType.String:
-                    if (question.answers.length != 1) {
-                        result.set("answers", "Question should have one answer");
-                    }
-                    break;
-                default:
-                    result.set("answers", "Question Type is required");
+        )
+        .test(
+            "answers-for-type",
+            "Question should have at least one correct answer",
+            function (answers) {
+                const correctCount = answers?.filter(a => a.isCorrect && a.content).length;                
+                switch (this.parent.questionType) {
+                    case QuestionType.String:
+                    case QuestionType.Single:
+                        return correctCount === 1;
+                    case QuestionType.Multiple:
+                        return correctCount ? correctCount > 0 : false;
+                    default: return false;
+                }
             }
-        }
+        )
 
-        return result;
-    }
-}
+});
+
+export default validationSchema;

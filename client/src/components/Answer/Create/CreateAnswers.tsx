@@ -2,6 +2,7 @@ import { Checkbox, IconButton, Radio, RadioGroup, Stack, TextField } from "@mui/
 import React from "react";
 import { QuestionType } from "../../../Model/CreateTest/NewQuestion";
 import DeleteIcon from '@mui/icons-material/Delete';
+import styleProps from "../../Auth/LoginForm/LoginForm.styles";
 
 interface CreateAnswersProps {
     answersCount: number;
@@ -29,16 +30,13 @@ export class CreateAnswers extends React.Component<CreateAnswersProps> {
                         <Checkbox {...{}} onChange={(_, ch) => this.props.onCorrectChange(ch, i)} />
                     }
                     <TextField
-                        variant="outlined"
-                        label="Answer"
+                        {...styleProps}
                         placeholder="Content"
-                        size="small"
-                        required
+                        label="Answer"
                         fullWidth={true}
                         multiline={true}
                         maxRows={Infinity}
-                        margin="dense"
-                        onChange={(e) => this.props.onContentChange(e.target.value, i)}
+                        onChange={(e) => { this.props.onContentChange(e.target.value, i) }}
                     />
                     <IconButton onClick={() => this.props.onDelete(i)}>
                         <DeleteIcon />

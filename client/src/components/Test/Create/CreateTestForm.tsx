@@ -1,15 +1,81 @@
-import { Button, Container, FormLabel, Stack, TextField } from "@mui/material";
-import React from "react";
+import { Button, Container, FormHelperText, FormLabel, Stack, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { useFormik } from "formik";
 import { NewQuestion } from "../../../Model/CreateTest/NewQuestion";
 import { NewTest } from "../../../Model/CreateTest/NewTest";
 import { AuthService } from "../../../Services/AuthService";
-import { CreateQuestionForm } from "../../Question/Create/CreateQuestionForm";
-import { DisplayQuestions } from "../../Question/Display/DisplayQuestions";
+import styleProps from "../../Auth/LoginForm/LoginForm.styles";
+import { CreateQuestionForm } from "../../Question/Create";
+import { DisplayQuestions } from "../../Question/Display";
 import "./CreateTestForm.css";
+import validationSchema from "./CreateTestForm.validator";
 
 interface CreateTestFormState {
     test: NewTest;
     createQuestion: boolean;
+}
+
+export function CreateTest() {
+    const authService = new AuthService();
+    const [createQuestion, setCreateQuestion] = useState(false);
+
+    const initValues: NewTest = {
+        title: "",
+        userId: authService.getToken()?.userId ?? "",
+        questions: []
+    };
+
+    const formik = useFormik({
+        initialValues: initValues,
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values);
+        }
+    });
+
+    return (
+        <Container maxWidth="md" className="create-test-form">
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <FormLabel>New Test</FormLabel>
+                <span>
+                    <Button
+                        color="primary"
+                        onClick={() => setCreateQuestion(true)}>
+                        Add Question
+                    </Button>
+                    <Button
+                        color="success"
+                        onClick={() => formik.submitForm()}>
+                        Save Test
+                    </Button>
+                </span>
+            </Stack>
+            <TextField
+                {...formik.getFieldProps("title")}
+                {...styleProps}
+                label="Title"
+                multiline={true}
+                maxRows={Infinity}
+                placeholder="Title"
+                fullWidth={true}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+            />
+            <hr className="separator" />
+            {
+                createQuestion &&
+                <CreateQuestionForm
+                    onSave={(q) => {
+                        formik.setFieldValue("questions", [...formik.values.questions, q], true);
+                        setCreateQuestion(false);
+                    }}
+                    onCancel={() => setCreateQuestion(false)}
+                />
+            }
+            <FormHelperText error>{formik.errors.questions}</FormHelperText>
+            <DisplayQuestions questions={formik.values.questions}></DisplayQuestions>
+        </Container>
+    );
 }
 
 export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
@@ -22,7 +88,7 @@ export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
             test: {
                 title: "",
                 questions: [],
-                userId: this.authService.getToken()!.userId
+                userId: this.authService.getToken()?.userId ?? ""
             },
             createQuestion: false
         };
@@ -47,17 +113,14 @@ export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
                     </span>
                 </Stack>
                 <TextField
-                    variant="outlined"
-                    size="small"
+                    {...styleProps}
                     label="Title"
-                    required
-                    margin="dense"
                     multiline={true}
                     maxRows={Infinity}
                     placeholder="Title"
                     fullWidth={true}
                     onChange={(e) => this.setTestTitle(e)} />
-                <hr className="separator"/>
+                <hr className="separator" />
                 {
                     this.state.createQuestion &&
                     <CreateQuestionForm
@@ -65,7 +128,7 @@ export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
                         onCancel={() => this.cancelQuestion()}
                     />
                 }
-                <DisplayQuestions questions={this.state.test.questions} />
+                <DisplayQuestions questions={this.state.test.questions}></DisplayQuestions>
             </Container>
         );
     }
@@ -90,7 +153,7 @@ export class CreateTestForm extends React.Component<{}, CreateTestFormState> {
     }
 
     private save(): void {
-
+        console.log(this.state.test);
     }
 
     private setTestTitle(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {

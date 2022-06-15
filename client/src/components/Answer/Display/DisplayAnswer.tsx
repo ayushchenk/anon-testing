@@ -1,5 +1,6 @@
-import { Checkbox, Stack, TextField } from "@mui/material";
+import { Checkbox, Stack } from "@mui/material";
 import { NewAnswer } from "../../../Model/CreateTest/NewAnswer";
+import { QuestionType } from "../../../Model/CreateTest/NewQuestion";
 import "./DisplayAnswer.css";
 
 interface DisplayAnswerProps {

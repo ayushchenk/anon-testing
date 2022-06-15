@@ -1,6 +1,7 @@
 import * as Yup from "yup";
+import { AuthBase } from "../../../Model/AuthBase";
 
-const valdiationSchema = Yup.object().shape({
+const valdiationSchema = Yup.object<Record<keyof AuthBase, Yup.AnySchema>>({
     email: Yup.string()
         .nullable(true)
         .email("Should be valid email")

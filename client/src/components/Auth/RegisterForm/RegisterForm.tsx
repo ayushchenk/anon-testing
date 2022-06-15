@@ -62,7 +62,6 @@ export function RegisterForm(props: AuthFormProps) {
                         {...styleProps}
                         label="Confirm password"
                         type="password"
-                        value={formik.values.confirmPassword}
                         error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                         helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                     />

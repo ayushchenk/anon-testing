@@ -6,7 +6,7 @@ import { AuthService } from "../../Services/AuthService";
 import { LoginForm } from "../Auth/LoginForm";
 import { RegisterForm } from "../Auth/RegisterForm";
 import { Header } from "../Header/Header";
-import { CreateTestForm } from "../Test/Create/CreateTestForm";
+import { CreateTest } from "../Test/Create";
 
 interface AppState extends ApplicationContext {
 }
@@ -24,7 +24,7 @@ export class App extends React.Component<{}, AppState> {
     public render(): React.ReactNode {
         const loginForm = <LoginForm onSubmit={(token) => this.loginHandler(token)} />;
         const registerForm = <RegisterForm onSubmit={(token) => this.registerHandler(token)} />;
-        const createTestForm = <CreateTestForm />;
+        const createTestForm = <CreateTest />;
 
         return (
             <AppContext.Provider value={this.state}>

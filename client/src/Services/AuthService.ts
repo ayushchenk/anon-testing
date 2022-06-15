@@ -38,9 +38,6 @@ export class AuthService {
         try {
 
             const response = await fetch(`${this.ApiUrl}/${path}`, {
-                headers: {
-                    ["Content-Type"]: "application/json"
-                },
                 method: "POST",
                 body: JSON.stringify(model)
             });

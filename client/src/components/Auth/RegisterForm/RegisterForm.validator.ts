@@ -1,6 +1,7 @@
 import * as Yup from "yup";
+import { RegisterFormModel } from "./RegisterForm.types";
 
-const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object<Record<keyof RegisterFormModel, Yup.AnySchema>>({
     email: Yup.string()
         .nullable(true)
         .email("Should be valid email")
